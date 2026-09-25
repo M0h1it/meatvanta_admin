@@ -33,8 +33,8 @@ export default function Sidebar() {
 
   return (
     <nav className="hidden md:flex fixed left-0 top-0 h-full w-sidebar-width flex-col border-r border-outline-variant bg-secondary z-50">
-      <div className="p-lg flex items-center gap-3">
-        <BrandLogo className="h-10 w-10" />
+      <div className="p-lg flex items-center gap-3 border-b border-accent/25">
+        <BrandLogo className="h-11 w-11" />
         <div>
           <h1 className="text-headline-sm font-headline-sm font-bold text-surface-container-lowest leading-tight">
             Meat Vanta
@@ -42,7 +42,7 @@ export default function Sidebar() {
           <p className="text-xs text-accent font-medium">Admin Portal</p>
         </div>
       </div>
-      <div className="flex-1 mt-md overflow-y-auto">
+      <div className="flex-1 mt-sm overflow-y-auto">
         {visibleItems.map((item) => (
           <NavLink
             key={item.to}

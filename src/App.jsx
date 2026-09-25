@@ -3,6 +3,7 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 import AdminLayout from "./components/layout/AdminLayout";
 
 import LoginPage from "./features/auth/pages/LoginPage";
+import ForgotPasswordPage from "./features/auth/pages/ForgotPasswordPage";
 import DashboardPage from "./features/dashboard/pages/DashboardPage";
 import CategoriesPage from "./features/categories/pages/CategoriesPage";
 import ProductsPage from "./features/products/pages/ProductsPage";
@@ -22,6 +23,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
       <Route
         path="/"

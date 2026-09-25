@@ -1,12 +1,20 @@
 /**
- * Drop the real logo at /public/logo.png and it appears everywhere this is used.
- * Until then a monogram stands in, so layout and spacing are already correct.
+ * Two real assets in /public:
+ *  - logo-login.png  - the full circular "M" badge on a white background,
+ *                       used on the Login/Forgot Password cards (which sit
+ *                       on a near-white surface, so the white backing blends in).
+ *  - logo-sidebar.png - the same badge with a transparent background,
+ *                        cleaned up for use on the sidebar's dark red bg.
+ *
+ * variant="login"   -> logo-login.png (Login, Forgot Password)
+ * variant="sidebar" (default) -> logo-sidebar.png (Sidebar nav)
  */
-export default function BrandLogo({ className = "h-9 w-9", showFallbackText = false }) {
+export default function BrandLogo({ className = "h-9 w-9", variant = "sidebar", showFallbackText = false }) {
+  const src = variant === "login" ? "/logo-login.png" : "/logo-sidebar.png";
   return (
     <span className={`inline-flex items-center justify-center shrink-0 ${className}`}>
       <img
-        src="/logo.png"
+        src={src}
         alt="Meat Vanta"
         className="h-full w-full object-contain"
         onError={(e) => {

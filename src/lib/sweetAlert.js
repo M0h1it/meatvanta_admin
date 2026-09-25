@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-const BRAND = "#8a1f11"; // primary-container - matches every button in the app
+const BRAND = "#B4141F"; // primary-container - matches every button in the app
 
 export function showSuccess(message) {
   return Swal.fire({

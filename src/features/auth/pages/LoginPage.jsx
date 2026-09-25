@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import BrandLogo from "../../../components/common/BrandLogo";
 
 export default function LoginPage() {
+  const location = useLocation();
+  // Set by the reset flow so the admin gets confirmation on arrival.
+  const resetMessage = location.state?.message;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -28,18 +31,29 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface-container-low px-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-surface-container-low to-accent-soft/40 px-md">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-surface-container-lowest rounded-lg border border-outline-variant p-xl"
+        className="w-full max-w-sm bg-surface-container-lowest rounded-lg border border-outline-variant shadow-lg overflow-hidden"
       >
-        <div className="flex justify-center mb-3">
-          <BrandLogo className="h-16 w-16" />
-        </div>
-        <h1 className="font-display-lg text-display-lg text-primary text-center">Meat Vanta</h1>
-        <p className="font-body-lg text-body-lg text-on-surface-variant text-center mt-1 mb-lg">
-          Admin Portal Login
-        </p>
+        {/* Gold accent bar - ties the card to the logo's red/gold theme
+            without touching the shared color tokens. */}
+        <div className="h-1.5 bg-gradient-to-r from-accent via-primary to-accent" />
+
+        <div className="p-xl">
+          <div className="flex justify-center mb-3">
+            <BrandLogo variant="login" className="h-20 w-20" />
+          </div>
+          <h1 className="font-display-lg text-display-lg text-primary text-center">Meat Vanta</h1>
+          <p className="font-body-lg text-body-lg text-on-surface-variant text-center mt-1 mb-lg">
+            Admin Portal Login
+          </p>
+
+        {resetMessage && !error && (
+          <div className="mb-md rounded bg-secondary-fixed text-on-secondary-fixed-variant text-sm px-3 py-2">
+            {resetMessage}
+          </div>
+        )}
 
         {error && (
           <div className="mb-md rounded bg-error-container text-on-error-container text-body-md font-body-md px-sm py-2">
@@ -94,9 +108,16 @@ export default function LoginPage() {
           {isSubmitting ? "Signing in..." : "Sign In"}
         </button>
 
-        <p className="text-xs text-on-surface-variant text-center mt-lg">
-          Secure environment for authorized personnel only.
-        </p>
+        <div className="mt-md text-center">
+          <Link to="/forgot-password" className="text-sm font-semibold text-primary hover:underline">
+            Forgot password?
+          </Link>
+        </div>
+
+          <p className="text-xs text-on-surface-variant text-center mt-lg">
+            Secure environment for authorized personnel only.
+          </p>
+        </div>
       </form>
     </div>
   );

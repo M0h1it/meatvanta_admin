@@ -6,7 +6,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import Modal from "../../../components/common/Modal";
 import { showSuccess, showError } from "../../../lib/sweetAlert";
 
-const EMPTY_FORM = { id: null, name: "", email: "", password: "", roleId: "", isActive: true };
+const EMPTY_FORM = { id: null, name: "", email: "", phone: "", password: "", roleId: "", isActive: true };
 
 export default function AdminUsersPage() {
   const [admins, setAdmins] = useState([]);
@@ -43,16 +43,35 @@ export default function AdminUsersPage() {
   }
 
   function openEditForm(admin) {
-    setForm({ id: admin.id, name: admin.name, email: admin.email, password: "", roleId: admin.role.id, isActive: admin.isActive });
+    setForm({
+      id: admin.id,
+      name: admin.name,
+      email: admin.email,
+      phone: admin.phone || "",
+      password: "",
+      roleId: admin.role.id,
+      isActive: admin.isActive,
+    });
   }
 
   async function handleSave(e) {
     e.preventDefault();
     try {
       if (form.id) {
-        await updateAdminUser(form.id, { name: form.name, roleId: Number(form.roleId), isActive: form.isActive });
+        await updateAdminUser(form.id, {
+          name: form.name,
+          phone: form.phone,
+          roleId: Number(form.roleId),
+          isActive: form.isActive,
+        });
       } else {
-        await createAdminUser({ name: form.name, email: form.email, password: form.password, roleId: Number(form.roleId) });
+        await createAdminUser({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          password: form.password,
+          roleId: Number(form.roleId),
+        });
       }
       setForm(null);
       setError(null);
@@ -122,6 +141,29 @@ export default function AdminUsersPage() {
                 </div>
               </>
             )}
+
+            <div>
+              <label className="block font-label-bold text-label-bold text-on-surface mb-1">
+                Mobile Number
+              </label>
+              <div className="flex items-center rounded border border-outline-variant overflow-hidden">
+                <span className="px-3 py-2 text-sm font-semibold text-on-surface-variant border-r border-outline-variant">
+                  +91
+                </span>
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  maxLength={10}
+                  placeholder="10-digit number"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value.replace(/\D/g, "") })}
+                  className="flex-1 px-3 py-2 text-sm focus:outline-none"
+                />
+              </div>
+              <p className="text-xs text-on-surface-variant mt-1">
+                Needed to reset this password by SMS. Without it, this admin can't recover a lost password.
+              </p>
+            </div>
 
             <div>
               <label className="block font-label-bold text-label-bold text-on-surface mb-1">Role</label>

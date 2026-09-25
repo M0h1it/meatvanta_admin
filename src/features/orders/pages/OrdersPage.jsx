@@ -47,7 +47,9 @@ const PAYMENT_STATUS_LABELS = {
   submitted: "Payment submitted",
   verified: "Payment verified",
   rejected: "Payment rejected",
+  pending: "Awaiting payment",
   paid: "Paid",
+  failed: "Payment failed",
 };
 
 const PAYMENT_BADGE_STYLE = {
@@ -55,7 +57,9 @@ const PAYMENT_BADGE_STYLE = {
   submitted: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
   verified: "bg-secondary-fixed text-on-secondary-fixed-variant",
   rejected: "bg-error-container text-on-error-container",
+  pending: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
   paid: "bg-secondary-fixed text-on-secondary-fixed-variant",
+  failed: "bg-error-container text-on-error-container",
 };
 
 function formatDeliveryDate(value) {

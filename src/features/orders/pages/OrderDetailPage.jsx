@@ -40,7 +40,9 @@ const PAYMENT_STATUS_LABELS = {
   submitted: "Payment submitted",
   verified: "Payment verified",
   rejected: "Payment rejected",
+  pending: "Awaiting payment",
   paid: "Paid",
+  failed: "Payment failed",
 };
 
 function formatDateTime(value) {
@@ -180,7 +182,10 @@ export default function OrderDetailPage() {
   }
 
   const nextStatuses = ALLOWED_TRANSITIONS[order.status] || [];
+  // Legacy manual-UPI phone orders only - the customer-facing checkout no
+  // longer creates orders in "submitted" state (see Razorpay integration).
   const isUpiAwaitingReview = order.paymentMethod === "upi" && order.paymentStatus === "submitted";
+  const isRazorpayOrder = order.paymentMethod === "razorpay";
 
   return (
     <div className="print-full-width">
@@ -245,6 +250,24 @@ export default function OrderDetailPage() {
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {isRazorpayOrder && order.paymentStatus === "pending" && (
+        <div className="no-print mb-lg rounded-lg bg-tertiary-fixed border border-outline-variant p-md">
+          <p className="font-medium text-on-surface text-sm">
+            Waiting on payment - the customer hasn't completed checkout with Razorpay yet.
+            This order won't need any action from you unless it stays pending for a while.
+          </p>
+        </div>
+      )}
+
+      {isRazorpayOrder && order.paymentStatus === "failed" && (
+        <div className="no-print mb-lg rounded-lg bg-error-container border border-outline-variant p-md">
+          <p className="font-medium text-on-error-container text-sm">
+            The customer's Razorpay payment failed or couldn't be verified. They may retry from their end,
+            or you can follow up directly.
+          </p>
         </div>
       )}
 
@@ -335,6 +358,23 @@ export default function OrderDetailPage() {
               )}
             </div>
 
+            {isRazorpayOrder && (order.razorpayOrderId || order.razorpayPaymentId) && (
+              <div className="mt-3 pt-3 border-t border-outline-variant">
+                <p className="text-xs font-semibold text-on-surface mb-1">Razorpay reference</p>
+                {order.razorpayOrderId && (
+                  <p className="text-sm text-on-surface-variant">
+                    Order ID: <span className="font-mono">{order.razorpayOrderId}</span>
+                  </p>
+                )}
+                {order.razorpayPaymentId && (
+                  <p className="text-sm text-on-surface-variant">
+                    Payment ID: <span className="font-mono">{order.razorpayPaymentId}</span>
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Legacy manual-UPI proof, still shown for old phone orders that carry it. */}
             {(order.upiTransactionId || order.upiReceiptText) && (
               <div className="mt-3 pt-3 border-t border-outline-variant">
                 <p className="text-xs font-semibold text-on-surface mb-1">Customer payment proof</p>
